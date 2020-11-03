@@ -31,6 +31,7 @@ header {
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;	
+	z-index: 1;
 }
 
 header h1 {
@@ -118,6 +119,11 @@ header .ip-address-information div h2 {
 	font-size: 22px;
 	font-weight: 500;
 	color: var(--very-dark-gray, darkgrey);
+}
+
+section {
+	height: 70vh;
+	z-index: 0;
 }
 
 .attribution { 
