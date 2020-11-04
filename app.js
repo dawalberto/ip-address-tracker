@@ -1,9 +1,9 @@
 window.onload = () => {
 
-    const ip = document.querySelector('#ip')
-    const buttonSearch = document.querySelector('#btn')
-
     const address = document.querySelector('#address')
+    const buttonSearch = document.querySelector('#btn')
+    
+    const ip = document.querySelector('#ip')
     const location = document.querySelector('#location')
     const timezone = document.querySelector('#timezone')
     const isp = document.querySelector('#isp')
@@ -17,7 +17,7 @@ window.onload = () => {
 
 
     function trackIp() {
-        let ipToSearch = ip.value
+        let ipToSearch = address.value
         validateIp(ipToSearch) && getIPInfo(ipToSearch)
     }
 
@@ -59,12 +59,12 @@ window.onload = () => {
     }
 
     function printData(data) {
-        address.textContent = data.ip
+        ip.textContent = data.ip
         location.textContent = `${data.location.city}, ${data.location.country} ${data.location.postalCode}`
         timezone.textContent = `${data.location.timezone}`
         isp.textContent = data.isp
 
-        ip.value = ''
+        address.value = ''
     }
 
     function setViewMap(location) {
