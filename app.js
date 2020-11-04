@@ -11,50 +11,60 @@ window.onload = () => {
 
 
     setLayerMap()
-    trackIp()
+    trackAddress()
 
-    buttonSearch.onclick = trackIp
+    buttonSearch.onclick = trackAddress
 
 
-    function trackIp() {
-        let ipToSearch = address.value
-        validateIp(ipToSearch) && getIPInfo(ipToSearch)
+    function trackAddress() {
+        let addressToTrack = address.value
+
+        if (validateAddress(addressToTrack)) {
+            let cleanedAdderss = cleanAddress(addressToTrack)
+            fetchAddress(cleanedAdderss) 
+        }
     }
 
-    function validateIp(ip) {
-        if (!ip) {
-            alert('📢 Indicate some IP address')
+    function validateAddress(address) {
+        if (!address) {
+            alert('📢 Indicate some address')
             return false
-        }
-
-        let splitedIp = ip.split('.')
-
-        if (splitedIp.length !== 4) {
-            alert('📢 IP address is made up of four octets separated by dots. For example 8.8.8.8')
-            return false
-        }
-
-        for (let i = 0; i < splitedIp.length; i++) {
-            let octet = splitedIp[i]
-
-            if (!Number(octet) && octet !== '0') {
-                alert('📢 Octets have to be numbers')
-                return false
-            }
         }
 
         return true
     }
 
-    function getIPInfo(ip) {
-        fetch(`https://geo.ipify.org/api/v1?apiKey=at_KTIV3epeFvXQo4oFDdeiCjd6XfYnq&ipAddress=${ip}`)
+    function cleanAddress(address) {
+        address = address.trim()
+
+        const [http, https] = ['http://', 'https://']
+
+        if (address.startsWith(http)) {
+            address = address.slice(http.length)
+        } else if (address.startsWith(https)) {
+            address = address.slice(https.length)
+        }
+
+        return address[address.length - 1] === '/' ? address.slice(0, address.length - 1) : address
+    }
+
+    function fetchAddress(address) {
+        fetch(`https://geo.ipify.org/api/v1?apiKey=at_KTIV3epeFvXQo4oFDdeiCjd6XfYnq&ipAddress=${address}`)
         .then(res => res.json())
         .then(data => {
             printData(data)
             setViewMap(data.location)
         })
         .catch(err => {
-            alert('Ops! something went wrong... 😢')
+            fetch(`https://geo.ipify.org/api/v1?apiKey=at_KTIV3epeFvXQo4oFDdeiCjd6XfYnq&domain=${address}`)
+            .then(res => res.json())
+            .then(data => {
+                printData(data)
+                setViewMap(data.location)
+            })
+            .catch(err => {
+                alert('Ops! something went wrong... 😢. Check that the address is correctly written')
+            })
         })
     }
 
