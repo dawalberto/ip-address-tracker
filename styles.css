@@ -24,6 +24,7 @@ body {
 }
 
 header {
+	position: relative;
 	width: 100%;
 	height: 30vh;
 	padding: 1.5rem;
@@ -139,10 +140,6 @@ section {
 }
 
 @media (min-width: 375px) {
-	header {
-		position: relative;
-	}
-
 	header .searcher {
 		width: 40%;
 		margin: 1.6rem auto;
