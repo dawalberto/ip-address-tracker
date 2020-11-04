@@ -127,6 +127,14 @@ section {
 	z-index: 0;
 }
 
+section #ilocation {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 500;
+}
+
 .attribution { 
 	position: fixed;
 	bottom: .5rem;
