@@ -11,13 +11,40 @@ window.onload = () => {
 
 
     setLayerMap()
-    trackAddress()
+    getMyIP()
 
     buttonSearch.onclick = trackAddress
+    address.addEventListener('keydown', (e) => {
+        if (e.keyCode === 13 && e.code === 'Enter') {
+            trackAddress()
+        }
+    })
 
 
-    function trackAddress() {
-        let addressToTrack = address.value
+    function setLayerMap() {
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoiZGF3YWxiZXJ0byIsImEiOiJja2gyazZmdW8wZGQ5MndwYzRoeTBuamw0In0.Qyxd8mQt7OlIbhV4UkSUNw'
+        }).addTo(map)
+    }
+
+    function getMyIP() {
+        fetch('https://api.ipgeolocation.io/ipgeo?apiKey=5687c84459dc4c9c915f0c04b6e4bccb')
+        .then(res => res.json())
+        .then(data => {
+            trackAddress(data.ip)
+        })
+        .catch(err => {
+            alert('Ops! something went wrong... 😢.')
+        })        
+    }
+
+    function trackAddress(ip) {
+        let addressToTrack = ip ? ip : address.value
 
         if (validateAddress(addressToTrack)) {
             let cleanedAdderss = cleanAddress(addressToTrack)
@@ -79,17 +106,6 @@ window.onload = () => {
 
     function setViewMap(location) {
         map.setView([location.lat, location.lng], 13)        
-    }
-
-    function setLayerMap() {
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox/streets-v11',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'pk.eyJ1IjoiZGF3YWxiZXJ0byIsImEiOiJja2gyazZmdW8wZGQ5MndwYzRoeTBuamw0In0.Qyxd8mQt7OlIbhV4UkSUNw'
-        }).addTo(map)
     }
 
 }
